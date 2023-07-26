@@ -7,7 +7,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
-
+use Illuminate\Support\Str;
+use App\Scopes\ActiveUserScope;
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
@@ -43,5 +44,22 @@ class User extends Authenticatable
     public function tasks()
     {
         return $this->hasMany(Task::class, 'user_id');
+    }
+    public function getFullnameAttribute()
+    {
+        return $this->first_name . ' ' . $this->last_name;
+    }
+    public function setUsernameAttribute($value)
+    {
+        $this->username = Str::slug($value);
+    }
+    public function scopeAdmin($query)
+    {
+        return $query->where('is_admin', true);
+    }
+    protected static function boot()
+    {
+        parent::boot();
+        static::addGlobalScope(new ActiveUserScope());
     }
 }
