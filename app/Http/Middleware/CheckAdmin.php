@@ -20,6 +20,7 @@ class CheckAdmin
         if (Auth::user() && Auth::user()->is_admin) {
             return $next($request);
         }
+ 
         return redirect('/');
     }
 }
