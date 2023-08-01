@@ -1,0 +1,21 @@
+{
+  "name": "laravel-sun",
+  "description": "quicktask",
+  "main": "",
+  "authors": [
+    "khoanx1007 <khoanx1007@gmail.com>"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/khoanx1007/Laravel_QuickTask",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "light-bootstrap-dashboard": "https://demos.creative-tim.com/light-bootstrap-dashboard/",
+    "modernize-template": "https://themewagon.github.io/Modernize/src/html/"
+  }
+}
