@@ -19,16 +19,26 @@
                 <a class="navbar-brand" href="{{ url('/') }}">
                     {{ config('app.name', 'Laravel') }}
                 </a>
-                <a href="{{ route('change.language', ['locale' => 'en']) }}">English</a>
-                &nbsp;
-                <a href="{{ route('change.language', ['locale' => 'vi']) }}">Tiếng Việt</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
-                    <ul class="navbar-nav me-auto">
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('change.language', ['locale' => 'en']) }}">English</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('change.language', ['locale' => 'vi']) }}">Tiếng Việt</a>
+                        </li>
+                        @auth
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('users.index') }}">{{__('Users')}}</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('tasks.index') }}">{{__('Tasks')}}</a>
+                            </li>
+                        @endauth
                     </ul>
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ms-auto">
@@ -57,7 +67,6 @@
                                                      document.getElementById('logout-form').submit();">
                                         {{ __('Logout') }}
                                     </a>
-
                                     <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                                         @csrf
                                     </form>
@@ -73,5 +82,38 @@
             @yield('content')
         </main>
     </div>
+    <script src="{{ asset('js/app.js') }}"></script>
+    <script src="{{ asset('js/bootstrap.js') }}"></script>
+    <script src="{{ asset('js/jquery.min.js') }}"></script>
+    <script>
+        $(document).ready(function () {
+            $('#myModal').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget);
+                var userId = button.data('user-id');
+                var modal = $(this);
+
+                $.ajax({
+                    url: '/user-tasks/' + userId,
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function (response) {
+                        var tasks = response.tasks;
+                        var taskList = modal.find('#task-list');
+                        taskList.empty();
+
+                        tasks.forEach(function (task) {
+                            var taskRow = '<tr>' +
+                                            '<th scope="row">' + task.name + '</th>' +
+                                            '<td>' +
+                                                '<a href="" class="btn btn-primary text-decoration-none">{{__('Edit')}}</a> | <a class="btn btn-danger text-decoration-none">{{__('Delete')}}</a>' +
+                                            '</td>' +
+                                        '</tr>';
+                            taskList.append(taskRow);
+                        });
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 </html>
