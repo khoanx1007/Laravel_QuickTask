@@ -18,3 +18,5 @@ yarn-error.log
 /.vscode
 /bower_components/*
 /public/css/app.css
+/public/fonts
+/public/webfonts

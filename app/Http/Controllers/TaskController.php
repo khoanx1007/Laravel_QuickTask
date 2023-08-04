@@ -14,9 +14,14 @@ class TaskController extends Controller
      */
     public function index()
     {
-        //
+        
     }
-
+    public function userTaskList(Request $request, $userId)
+    {
+        $tasks = Task::where('user_id', $userId)->get();
+        
+        return response()->json(['tasks' => $tasks]);
+    }
     /**
      * Show the form for creating a new resource.
      *
